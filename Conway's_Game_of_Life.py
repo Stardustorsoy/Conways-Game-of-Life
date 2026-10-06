@@ -1,8 +1,38 @@
 import numpy as np
 
-#Later on, ask the user for which board set up they would like
+ask = int(input("What starting pattern would you like?\nRandom Generation - 1\nBlock - 2\nBlinker - 3\nToad - 4\nGlider"))
 
-current_generation = np.random.choice([True, False], size = (500, 500), p = [0.20, 0.80])
+if ask == 1:
+    current_generation = np.random.choice([True, False], size = (500, 500), p = [0.20, 0.80])
+else:
+    current_generation = np.full((500,500), False)
+
+    if ask == 2:
+        current_generation[249,249] = True
+        current_generation[249,250] = True
+        current_generation[250,249] = True
+        current_generation[250,250] = True
+
+    elif ask == 3:
+        current_generation[248,249] = True
+        current_generation[249,249] = True
+        current_generation[250,249] = True
+            
+    elif ask == 4:
+        current_generation[248,249] = True
+        current_generation[249,249] = True
+        current_generation[250,249] = True
+        current_generation[249,250] = True
+        current_generation[250,250] = True
+        current_generation[251,250] = True
+
+    elif ask == 5:
+        current_generation[249,248] = True
+        current_generation[250,249] = True
+        current_generation[248,250] = True
+        current_generation[249,250] = True
+        current_generation[250,250] = True
+        
 
 next_generation = np.full((500,500), False)
 
