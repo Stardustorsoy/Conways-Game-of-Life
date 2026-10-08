@@ -1,6 +1,6 @@
 import numpy as np
 
-ask = int(input("What starting pattern would you like?\nRandom Generation - 1\nBlock - 2\nBlinker - 3\nToad - 4\nGlider"))
+ask = int(input("What starting pattern would you like?\nRandom Generation - 1\nBlock - 2\nBlinker - 3\nToad - 4\nGlider - 5\n"))
 
 if ask == 1:
     current_generation = np.random.choice([True, False], size = (500, 500), p = [0.20, 0.80])
@@ -34,48 +34,58 @@ else:
         current_generation[250,250] = True
         
 
-next_generation = np.full((500,500), False)
 
+while True:
 
-for i in range(500):
+    next_generation = np.full((500,500), False)
+
     for j in range(500):
+        for i in range(500):
+            # [Row, Column]
+            # [Y, X]
+            # [j, i]
+            i_check = i-1
+            j_check = j-1
 
-        i_check = i-1
-        j_check = j-1
+            adj_alive = 0
 
-        adj_alive = 0
+            for n in range(9):
 
-        for n in range(9):
-            check = current_generation[i_check, j_check]
-
-            if check == True:
-                adj_alive += 1
-
-            if(n == 3 or n == 6):
-                i_check = i-1
-                j_check += 1
-
-            else:
-                i_check += 1
-
-        if current_generation[i, j] == True:
-            adj_alive -= 1
+                if i_check < 0 or i_check >= 500 or j_check < 0 or j_check >= 500:
+                    check = False;
+                else:
+                    check = current_generation[j_check, i_check]
 
 
-        #Underpopulation
-        if adj_alive < 2 and current_generation[i, j] == True:
-            next_generation[i, j] = False
+                if check == True:
+                    adj_alive += 1
 
-        #Survival
-        elif (adj_alive == 2 or adj_alive == 3) and current_generation[i, j] == True:
-            next_generation[i, j] = True
+                if(n == 2 or n == 5):
+                    i_check = i-1
+                    j_check += 1
 
-        #Overpopulation
-        elif adj_alive > 3 and current_generation[i, j] == True:
-            next_generation[i, j] = False
+                else:
+                    i_check += 1
 
-        #Reproduction
-        elif adj_alive == 3 and current_generation[i, j] == False:
-            next_generation[i, j] = True
+            if current_generation[j, i] == True:
+                adj_alive -= 1
 
-        #If i or j is 0, or 500, make check automatically false to account for dead borders
+
+            #Underpopulation
+            if adj_alive < 2 and current_generation[j, i] == True:
+                next_generation[j, i] = False
+
+            #Survival
+            elif (adj_alive == 2 or adj_alive == 3) and current_generation[j, i] == True:
+                next_generation[j, i] = True
+
+            #Overpopulation
+            elif adj_alive > 3 and current_generation[j, i] == True:
+                next_generation[j, i] = False
+
+            #Reproduction
+            elif adj_alive == 3 and current_generation[j, i] == False:
+                next_generation[j, i] = True
+
+    current_generation = next_generation
+        
